@@ -419,3 +419,67 @@ Regular expressions (regex) are a sequence of characters that define a search pa
 - **Explanation:** Acts as an OR operator. It finds lines containing either "cat" or "dog".
 
 These examples provide a foundation for understanding and utilizing basic regex patterns with the `grep` command for powerful text searching and manipulation tasks.
+
+## `[]` vs `[[]]`
+
+- Use `[]` whenever you want your script to be portable across shells.
+- Use `[[]]` if you want conditional expressions not supported by `[]` and don't need to be portable.
+
+## Check Number Input
+
+To check if it's a number, you could use a regexp. This should be working:
+
+```bash
+re='^[0-9]+$'
+if ! [[ $yournumber =~ $re ]] ; then
+   echo "error: Not a number" >&2; exit 1
+fi
+```
+
+If the value is not necessarily an integer, consider amending the regex appropriately; for instance:
+
+- For decimal numbers: `^[0-9]+([.][0-9]+)?$`
+- To handle numbers with a sign: `^[+-]?[0-9]+([.][0-9]+)?$`
+
+## Special Variables in Shell
+
+| Special Variable | Description                                           |
+|------------------|-------------------------------------------------------|
+| `$0`             | The name of the bash script.                          |
+| `$1, $2...$n`    | The bash script arguments.                            |
+| `$$`             | The process id of the current shell.                  |
+| `$#`             | The total number of arguments passed to the script.   |
+| `$@`             | The value of all the arguments passed to the script.  |
+| `$?`             | The exit status of the last executed command.         |
+| `$!`             | The process id of the last executed command.          |
+
+## `exit` vs. `return`
+
+- From `man bash` on `return [n]`:
+    > Causes a function to stop executing and return the value specified by `n` to its caller. If `n` is omitted, the return status is that of the last command executed in the function body.
+
+- ... on `exit [n]`:
+    > Cause the shell to exit with a status of `n`. If `n` is omitted, the exit status is that of the last command executed. A trap on EXIT is executed before the shell terminates.
+
+Example script to illustrate `exit` vs. `return`:
+
+```bash
+#!/bin/bash
+
+retfunc()
+{
+    echo "this is retfunc()"
+    return 1
+}
+
+exitfunc()
+{
+    echo "this is exitfunc()"
+    exit 1
+}
+
+retfunc
+echo "We are still here"
+exitfunc
+echo "We will never see this"
+```
