@@ -483,3 +483,29 @@ echo "We are still here"
 exitfunc
 echo "We will never see this"
 ```
+
+## General options:
+
+- `-a`, `--all`: Show all items, including hidden ones.
+- `-c`: Specify a configuration file or command, or show counts.
+- `-d`, `--directory`: Operate on directories, or specify a directory.
+- `-e`: Specify an environment or expression.
+- `-f`, `--force`: Force the operation, ignoring warnings or prompts.
+- `-g`: Operate on or show group-related information.
+- `-h`, `--help`: Display help information about the command.
+- `-i`, `--interactive`: Interactive mode, prompting before action.
+- `-l`: Long format, showing detailed information.
+- `-m`: Modify or show modification-related settings or information.
+- `-n`: Specify a number or show numerical information.
+- `-o`: Specify an output file, or show options.
+- `-p`: Preserve file attributes or show process-related information.
+- `-q`, `--quiet`: Quiet mode, minimize output.
+- `-r`, `--recursive`: Operate recursively on directories.
+- `-s`: Show size information, or operate silently.
+- `-t`: Specify a tag or show time-related information.
+- `-u`: Operate on or show user-related information.
+- `-v`, `--verbose`: Verbose mode, show detailed output.
+- `-w`: Specify a width or show warning-related settings.
+- `-x`: Exclude something, or specify execution-related settings.
+- `-y`: Confirm all prompts automatically.
+- `-z`: Operate on compressed files or check for zero length.
