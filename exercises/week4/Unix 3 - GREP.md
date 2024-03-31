@@ -258,7 +258,21 @@ If the script detects a positive or negative integer it should print "You entere
 
 IMPORTANT: While the bash shell understands quantifiers like *,? and + and the beginning and end of line anchors (^ and $) it does not understand \d for digits. Use [0-9] or [[:digit:]] instead.
 
-`re="^-?[0-9]+$"`
+`re="^-?[0-9]+$"` or `-*[[:digit:]]+`
+
+``` bash
+#!/bin/bash
+ 
+re="-*[[:digit:]]+" 
+echo -n "Enter a positive or negative integer number:" 
+read DATA 
+
+if [[ $DATA =~ $re ]]; then 
+    echo "You entered an integer"
+else
+    echo "You did not enter an integer"
+fi
+```
 
 ### Q13. Validating Floating Point numbers
 
@@ -266,4 +280,18 @@ This is similar to the previous question except that the user is prompted to ent
 
 IMPORTANT: While the bash shell understands quantifiers like *,? and + and the beginning and end of line anchors (^ and $) it does not understand \d for digits. Use [0-9] or [[:digit:]] instead.
 
-`re="^[0-9]+\.[0-9][0-9]+"`
+`re="^[0-9]+\.[0-9][0-9]+"` or `re="^[0-9]+\.[0-9][0-9]+"`
+
+```bash
+#!/bin/bash
+ 
+re="^[0-9]+\.[0-9]{2,}" 
+echo -n "Enter a positive floating point number:" 
+read DATA 
+
+if [[ $DATA =~ $re ]]; then 
+    echo "You entered a valid floating point number"
+else
+    echo "You did not enter a valid floating point number"
+fi
+```
