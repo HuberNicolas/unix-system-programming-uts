@@ -449,7 +449,7 @@ ls -l food2.txt massimo > l.txt // if standard error is not redirected, l.txt is
 
 ## Globbing
 
-* * any string, including null
+* \* any string, including null
 * ? any single char
 * \[...\] any one of the enclosed characters
 ```
@@ -462,7 +462,7 @@ ls food[1-3].txt
 
 ## Special parameters
 
- - * expands to the positional parameters with which the script (or a new shell) are called (i.e. the script’s arguments) as a single string. The separator (default: a space) can be chosen
+ - \* expands to the positional parameters with which the script (or a new shell) are called (i.e. the script’s arguments) as a single string. The separator (default: a space) can be chosen
 
 - 1 - 9 each expands to one positional parameter (more than nine is possible)
 
@@ -569,18 +569,38 @@ _How many times?_
 
 - `[]` matches any char in that list
 - `^` in front of list: matches any char that is not in that list: \[^A-Z\] anything except upper letter
-# Anchor
+
+## Anchor
 
 - `^`- beginning
 - `$`- end
 - `\b` forces the match to take place at the edge of a word
 
+## POSIX notation
+
+- `[:alnum:]` is `[:digit:]` or `[:alpha:]`
+- `[:alpha:]` is any letter
+- `[:blank:]` is a space or tab
+- `[:cntrl:]` is any control character
+- `[:digit:]` is any of 0 1 2 3 4 5 6 7 8 9
+- `[:graph:]` is not `[:alnum:]` nor `[:punct:]`
+- `[:lower:]` is low case characters in a to z
+- `[:print:]` is any printable character
+- `[:punct:]` is any punctuation character " \# \$ % & ' ( ) * + , - . / : ; < = > ? @ [ \\ ] ^ _ \` { | } ~
+- `[:space:]` is any of :CR FF HT NL VT SPACE
+- `[:upper:]` is upper case A to Z
+- `[:xdigit:]` is any hexadecimal digit a b c d e f A B C D E F 0 1 2 3 4 5 6 7 8 9
+
+put them into brackets when using in grep:
+
+`grep -E "[[:punct:]]" /course/linuxgym/vimdata/hermit.txt > punct.txt`
 
 ## GREP exits status
 
 - 0 any matchings lines found
 - 1 did not found anything
 - 2 error
+
 ## xargs
 
 If you want to find files matched by multiple regex’s, you can cascade grep commands using **xargs**:
@@ -588,3 +608,44 @@ If you want to find files matched by multiple regex’s, you can cascade grep co
 `grep –l 'this' * | xargs grep –l 'that'`
 
 xargs is a general-purpose Unix command that converts its standard input into **arguments** for the following command
+
+## Unix File System
+
+- Information stored on disks, SSDs, USB drives, ... and organised as files
+- Collection on files is called file system (or filesystem)
+- Unix and Linux can use many different types of filesystems (thats why they are popular)
+- Disk, SSDs, USB drives often divided into sections called partitions (due to protection and logical separation)
+- Storage area in a single partition is called volume, which uses _one_ type of filesystem
+- TB (old, 10^...) vs. TiB (new 2^...)
+- Unix: Files from all volumes/filesystem are organized into a single view called virtual filesystem. (:= filesystem from before)
+- No matter how many partitions we're using: Always included in hierarchy
+- This consistent interface allows the user to view the directory tree on the running system as a single entity (even when the tree is made up on a number of diverse file system types)
+
+## Partition
+
+- file `mtab` in `/etc` provides information about which filesystems are currently mounted (has 6 fields, last 2 not so important)
+  - device name (e.g., hdb2): hard disk, the second one, the second partition
+  - directory where that filesystem starts (e.g, `/boot`)
+  - type
+  - options (rw -> read and write, ro -> only read, like CD-ROM)
+  - frequency of dump operations (0 means ignore that fs)
+  - order of which `fsck` will check that filesystem (0 means ignore that fs)
+
+## Unix conventions
+
+- `/etc` system data
+- `/sys` system software
+- `/boot` kernel, usually one file
+- `/bin` system commands
+
+
+## Phyiscal strucutre of a partition
+
+  1. Boot Blook (used if partition is bootable yes/no)
+  2. "Superblock" (information about the layout of the blocks, e.g., how large are the blocks)
+     1. Block: unit of disk size that can be allocated (minimum amount of space we can assign, typically between 512 and 8192 bytes)
+  3. "i-list" (Long array of bits of information; List/Array of the i-nodes; Every file or directory has one inode; inode == pointers)
+  4. Storage space (blocks occupied by data + free blocks)
+  
+
+- Pointer is an address to a block in the partition

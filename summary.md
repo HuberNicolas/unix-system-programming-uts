@@ -324,6 +324,104 @@ for i in 1 2 3 4 5; do
 done
 ```
 
+- Simple for loop
+
+```bash
+#!/bin/bash
+
+# Check if exactly one argument is passed
+if [ $# -ne 1 ]; then
+    echo "Usage: $0 <n>"
+    echo "Where <n> is the upper limit of the range to iterate over."
+    exit 1
+fi
+
+# Iterate from 1 through n, where n is the first argument passed to the script
+n=$1
+for (( i=1; i<=n; i++ ))
+do
+    echo "Index: $i"
+done
+
+```
+
+`./iterate.sh 5`
+```
+Index: 1
+Index: 2
+Index: 3
+Index: 4
+Index: 5
+```
+
+___
+
+- \$\# gives you the number of positional parameters passed to the script or function.
+
+```bash
+#!/bin/bash
+
+echo "Number of arguments passed: $#"
+
+for arg in "$@"
+do
+    echo "$arg"
+done
+```
+
+`./script.sh one two three`
+```
+Number of arguments passed: 3
+one
+two
+three
+```
+
+___
+
+- \$\* expands to the positional parameters, starting from one. When enclosed in double quotes, it expands to a single word with the value of each parameter separated by the first character of the IFS special variable, which is a space by default.
+
+```bash
+#!/bin/bash
+
+echo "All arguments with \$*: $*"
+
+for arg in "$*"
+do
+    echo "$arg"
+done
+```
+
+`./script.sh one two three`
+```
+All arguments with $*: one two three
+one two three
+```
+
+
+___
+
+- \$\@ is similar to \$\*, but when enclosed in double quotes, each parameter expands to a separate word. This is useful when you want to iterate over arguments that may contain spaces.
+
+```bash
+#!/bin/bash
+
+echo "Iterating arguments with \$@"
+
+for arg in "$@"
+do
+    echo "$arg"
+done
+```
+
+`./script.sh "one two" three`
+```
+Iterating arguments with $@
+one two
+three
+```
+
+
 ## IF-ELSE 
 
 ```bash
