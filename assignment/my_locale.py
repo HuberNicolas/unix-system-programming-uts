@@ -1,7 +1,10 @@
 import sys
 import os
 
-"""
+# Disclaimer: During development, the name of the script was changed to my_locale.py
+# locale.py is already a standard python library.
+
+'''
 Requirements for the locale.py program:
 
 1. Program Name:
@@ -38,47 +41,107 @@ Requirements for the locale.py program:
 9. Error Handling:
    - Specific messages for incorrect syntax or command usage. Examples include missing file arguments or incorrect options.
 
-"""
+'''
 
 
 # Function to read the file and parse its contents
 def read_file(file_path):
-    # Check if argument_file
-    #   exists
+    #   Exists
     #   is a file
     #   is readable
 
-    with open(file_path, 'r') as file:
-        data = file.readlines()
-    return [line.strip().split(',') for line in data if line.strip()]
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        print(f'Error: The file "{file_path}" does not exist.')
+        return None
+
+    # Check if the file_path is indeed a file
+    if not os.path.isfile(file_path):
+        print(f'Error: "{file_path}" is not a file.')
+        return None
+
+    # Open the file and read its contents
+    try:
+        with open(file_path, 'r') as file:
+            parsed_data = []
+            for line in file:
+                # Strip whitespace from the ends and check if the line is not empty
+                clean_line = line.strip()
+                if clean_line:
+                    # Split the line by commas and add to the list of parsed data
+                    parsed_data.append(clean_line.split(','))
+            return parsed_data
+    except IOError:
+        # Handle the error if the file cannot be read
+        print(f'Error: The file "{file_path}" cannot be read.')
+        return None
 
 
 # Function to list available locales
 def list_locales(data):
-    locales = [entry[2] for entry in data if entry[0] == 'locale']
-    return locales if locales else ['No locales available']
+    # Initialize an empty list to store locale filenames
+    locales = []
+
+    # Iterate through each entry in the data
+    for entry in data:
+        # Check if the entry type is 'locale'
+        if entry[0] == 'locale':
+            # Add the filename part of the entry to the locales list
+            locales.append(entry[2])
+
+    # Check if there are charmaps
+    if locales:
+        return locales
+    else:
+        return ['No locales available']
 
 
 # Function to list available charmaps
 def list_charmaps(data):
-    charmaps = [entry[2] for entry in data if entry[0] == 'charmap']
-    return charmaps if charmaps else ['No charmaps available']
+    # Initialize an empty list to store charmap filenames
+    charmaps = []
+    # Iterate through each entry in the data
+    for entry in data:
+        # Check if the entry type is 'charmap'
+        if entry[0] == 'charmap':
+            # Add the filename part of the entry to the charmaps list
+            charmaps.append(entry[2])
+
+    # Check if there are charmaps
+    if charmaps:
+        return charmaps
+    else:
+        return ['No charmaps available']
 
 
 # Function to list information about a specific language
 def language_info(data, language):
-    locales = [entry for entry in data if entry[0] == 'locale' and entry[1] == language]
-    charmaps = [entry for entry in data if entry[0] == 'charmap' and entry[1] == language]
+    # Initialize empty lists to store locale and charmap entries
+    locales = []
+    charmaps = []
+
+    # Iterate through each entry in the data
+    for entry in data:
+        # Check if the entry is a locale and matches the specified language
+        if entry[0] == 'locale' and entry[1] == language:
+            locales.append(entry)  # Add the entire entry to the locales list
+
+        # Check if the entry is a charmap and matches the specified language
+        elif entry[0] == 'charmap' and entry[1] == language:
+            charmaps.append(entry)  # Add the entire entry to the charmaps list
+
+    # Check there are not locals and charmaps for speficied language
     if not locales and not charmaps:
-        return [f'No locales or charmaps in this language']
-    return [
-        f'Language {language}:',
-        f'Total number of locales: {len(locales)}',
-        f'Total number of charmaps: {len(charmaps)}'
-    ]
+        return [f'No locales and charmaps in this language']
+    else:
+        return [
+            f'Language {language}:',
+            f'Total number of locales: {len(locales)}',
+            f'Total number of charmaps: {len(charmaps)}'
+        ]
 
 
-# Function to print version information
+# Function to print version information: author, studid and submission date
 def version_info():
     return [
         'Nicolas Huber',
@@ -95,37 +158,40 @@ def main():
         sys.exit(1)
 
     option = sys.argv[1]
+    
+    # In the following, triple quotes ''' are used for multi-line strings
+    # ==> we can include line breaks in the strings without using escape characters '\n'
 
-    # Handle the -v option first since it's a common case and simple to check
+    # Handle the -v option first since its a common case and simple to check
     if option == '-v':
         if len(sys.argv) != 3:
-            print("""Incorrect usage for version info. Correct usage: {} -v argument_file""".format(sys.argv[0]))
+            print('''Incorrect usage for version info. Correct usage: {} -v argument_file'''.format(sys.argv[0]))
             sys.exit(1)
         file_path = sys.argv[2]
         if not os.path.isfile(file_path):
-            print("""Error: The file {} does not exist or is not readable.""".format(file_path))
+            print('''Error: The file {} does not exist or is not readable.'''.format(file_path))
             sys.exit(1)
         for line in version_info():
             print(line)
         return
 
-    # Handle -l for language-specific information with a requirement for 4 arguments
+    # Handle -l for language-specific information with a requireent for 4 arguments
     elif option == '-l':
         if len(sys.argv) != 4:
-            print("""Incorrect usage for language info. Correct usage: {} -l <language> argument_file""".format(
+            print('''Incorrect usage for language info. Correct usage: {} -l <language> argument_file'''.format(
                 sys.argv[0]))
             sys.exit(1)
         language = sys.argv[2]
         file_path = sys.argv[3]
     else:
         if len(sys.argv) != 3:
-            print("""Incorrect usage. Correct usage: {} -option argument_file""".format(sys.argv[0]))
+            print('''Incorrect usage. Correct usage: {} -option argument_file'''.format(sys.argv[0]))
             sys.exit(1)
         file_path = sys.argv[2]
 
     # Check if the file exists and is readable
     if not os.path.isfile(file_path):
-        print("""Error: The file {} does not exist or is not readable.""".format(file_path))
+        print('''Error: The file {} does not exist or is not readable.'''.format(file_path))
         sys.exit(1)
 
     # Load the data from the file
@@ -142,7 +208,7 @@ def main():
         for line in language_info(data, language):
             print(line)
     else:
-        print("""Error: Invalid option {}""".format(option))
+        print('''Error: Invalid option {}'''.format(option))
         sys.exit(1)
 
 

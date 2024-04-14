@@ -32,7 +32,7 @@ class TestLocaleScript(unittest.TestCase):
         with patch('builtins.open', mock_open(read_data=file_content), create=True):
             with patch('sys.argv', test_args):
                 my_locale.main()
-                self.assertEqual(sys.stdout.getvalue(), "No locales or charmaps in this language\n")
+                self.assertEqual(sys.stdout.getvalue(), "No locales and charmaps in this language\n")
 
     def test_version_info_with_file_exist(self):
         test_args = ['locale.py', '-v', './data/full_argument_file.csv']
