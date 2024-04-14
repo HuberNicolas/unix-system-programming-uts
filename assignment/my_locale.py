@@ -152,24 +152,25 @@ def version_info():
 
 # Main function to process command-line arguments
 def main():
+    # In the following, triple quotes ''' are used for multi-line strings
+    # ==> we can include line breaks in the strings without using escape characters '\n'
+
+
     # Basic sanity checks on minimum arguments
     if len(sys.argv) < 3:
-        print('Incorrect usage.\nCorrect usage: {} -option [language] argument_file'.format(sys.argv[0]))
+        print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
         sys.exit(1)
 
     option = sys.argv[1]
-    
-    # In the following, triple quotes ''' are used for multi-line strings
-    # ==> we can include line breaks in the strings without using escape characters '\n'
 
     # Handle the -v option first since its a common case and simple to check
     if option == '-v':
         if len(sys.argv) != 3:
-            print('''Incorrect usage for version info. Correct usage: {} -v argument_file'''.format(sys.argv[0]))
+            print(f'''Incorrect usage for version info. Correct usage: {sys.argv[0]} -v argument_file''')
             sys.exit(1)
         file_path = sys.argv[2]
         if not os.path.isfile(file_path):
-            print('''Error: The file {} does not exist or is not readable.'''.format(file_path))
+            print(f'''Error: The file {file_path} does not exist or is not readable.''')
             sys.exit(1)
         for line in version_info():
             print(line)
@@ -178,20 +179,19 @@ def main():
     # Handle -l for language-specific information with a requireent for 4 arguments
     elif option == '-l':
         if len(sys.argv) != 4:
-            print('''Incorrect usage for language info. Correct usage: {} -l <language> argument_file'''.format(
-                sys.argv[0]))
+            print(f'''Incorrect usage for language info. Correct usage: {sys.argv[0]} -l <language> argument_file''')
             sys.exit(1)
         language = sys.argv[2]
         file_path = sys.argv[3]
     else:
         if len(sys.argv) != 3:
-            print('''Incorrect usage. Correct usage: {} -option argument_file'''.format(sys.argv[0]))
+            print(f'''Incorrect usage. Correct usage: {sys.argv[0]} -option argument_file''')
             sys.exit(1)
         file_path = sys.argv[2]
 
     # Check if the file exists and is readable
     if not os.path.isfile(file_path):
-        print('''Error: The file {} does not exist or is not readable.'''.format(file_path))
+        print(f'''Error: The file {file_path} does not exist or is not readable.''')
         sys.exit(1)
 
     # Load the data from the file
@@ -208,7 +208,7 @@ def main():
         for line in language_info(data, language):
             print(line)
     else:
-        print('''Error: Invalid option {}'''.format(option))
+        print(f'''Error: Invalid option {option}''')
         sys.exit(1)
 
 
