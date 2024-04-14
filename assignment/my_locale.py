@@ -40,48 +40,58 @@ Requirements for the locale.py program:
 
 """
 
+
 # Function to read the file and parse its contents
 def read_file(file_path):
     # Check if argument_file
     #   exists
     #   is a file
     #   is readable
-    
-    with open(file_path, 'r') as f:
-        data = f.readlines()
+
+    with open(file_path, 'r') as file:
+        data = file.readlines()
     return [line.strip().split(',') for line in data if line.strip()]
+
 
 # Function to list available locales
 def list_locales(data):
     locales = [entry[2] for entry in data if entry[0] == 'locale']
     return locales if locales else ['No locales available']
 
+
 # Function to list available charmaps
 def list_charmaps(data):
     charmaps = [entry[2] for entry in data if entry[0] == 'charmap']
     return charmaps if charmaps else ['No charmaps available']
+
 
 # Function to list information about a specific language
 def language_info(data, language):
     locales = [entry for entry in data if entry[0] == 'locale' and entry[1] == language]
     charmaps = [entry for entry in data if entry[0] == 'charmap' and entry[1] == language]
     if not locales and not charmaps:
-        return [f'No locales or charmaps in this language {language}']
+        return [f'No locales or charmaps in this language']
     return [
         f'Language {language}:',
         f'Total number of locales: {len(locales)}',
         f'Total number of charmaps: {len(charmaps)}'
     ]
 
+
 # Function to print version information
 def version_info():
-    return ['Nicolas Huber, 25061944, Friday 17 May 2024']
+    return [
+        'Nicolas Huber',
+        25061944,
+        'Friday 17 May 2024'
+    ]
+
 
 # Main function to process command-line arguments
 def main():
     # Basic sanity checks on minimum arguments
     if len(sys.argv) < 3:
-        print("""Incorrect usage.\nCorrect usage: {} -option [language] argument_file""".format(sys.argv[0]))
+        print('Incorrect usage.\nCorrect usage: {} -option [language] argument_file'.format(sys.argv[0]))
         sys.exit(1)
 
     option = sys.argv[1]
@@ -102,7 +112,8 @@ def main():
     # Handle -l for language-specific information with a requirement for 4 arguments
     elif option == '-l':
         if len(sys.argv) != 4:
-            print("""Incorrect usage for language info. Correct usage: {} -l <language> argument_file""".format(sys.argv[0]))
+            print("""Incorrect usage for language info. Correct usage: {} -l <language> argument_file""".format(
+                sys.argv[0]))
             sys.exit(1)
         language = sys.argv[2]
         file_path = sys.argv[3]
@@ -134,6 +145,7 @@ def main():
         print("""Error: Invalid option {}""".format(option))
         sys.exit(1)
 
+
 if __name__ == '__main__':
     main()
- # type: ignore
+# type: ignore
