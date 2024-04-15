@@ -1,3 +1,4 @@
+# IMPORTS
 import sys
 import os
 
@@ -49,6 +50,11 @@ Requirements for the locale.py program:
 
 '''
 
+# CONSTANTS
+CHARMAP_STR = 'charmap'
+LOCALE_STR = 'locale'
+
+
 
 # Function to read the file and parse its contents
 def read_file(file_path):
@@ -88,12 +94,12 @@ def list_locales(data):
     # Initialize an empty list to store locale filenames
     locales = []
 
-    # Iterate through each entry in the data
-    for entry in data:
-        # Check if the entry type is 'locale'
-        if entry[0] == 'locale':
-            # Add the filename part of the entry to the locales list
-            locales.append(entry[2])
+    # Iterate through each row in the data
+    for row in data:
+        # Check if the row type is 'locale'
+        if row[0] == LOCALE_STR:
+            # Add the filename part of the row to the locales list
+            locales.append(row[2])
 
     # Check if there are charmaps
     if locales:
@@ -106,12 +112,12 @@ def list_locales(data):
 def list_charmaps(data):
     # Initialize an empty list to store charmap filenames
     charmaps = []
-    # Iterate through each entry in the data
-    for entry in data:
-        # Check if the entry type is 'charmap'
-        if entry[0] == 'charmap':
-            # Add the filename part of the entry to the charmaps list
-            charmaps.append(entry[2])
+    # Iterate through each row in the data
+    for row in data:
+        # Check if the row type is 'charmap'
+        if row[0] == CHARMAP_STR:
+            # Add the filename part of the row to the charmaps list
+            charmaps.append(row[2])
 
     # Check if there are charmaps
     if charmaps:
@@ -126,15 +132,15 @@ def language_info(data, language):
     locales = []
     charmaps = []
 
-    # Iterate through each entry in the data
-    for entry in data:
-        # Check if the entry is a locale and matches the specified language
-        if entry[0] == 'locale' and entry[1] == language:
-            locales.append(entry)  # Add the entire entry to the locales list
+    # Iterate through each row in the data
+    for row in data:
+        # Check if the row is a locale and matches the specified language
+        if row[0] == LOCALE_STR and row[1] == language:
+            locales.append(row)  # Add the entire row to the locales list
 
-        # Check if the entry is a charmap and matches the specified language
-        elif entry[0] == 'charmap' and entry[1] == language:
-            charmaps.append(entry)  # Add the entire entry to the charmaps list
+        # Check if the row is a charmap and matches the specified language
+        elif row[0] == CHARMAP_STR and row[1] == language:
+            charmaps.append(row)  # Add the entire row to the charmaps list
 
     # Check there are not locals and charmaps for speficied language
     if not locales and not charmaps:
@@ -158,7 +164,6 @@ def version_info():
 
 # Main function to process command-line arguments
 def main():
-
     # python locale.py option argument_file
     # name of the python script that is executed: sys.argv[0], '0th argument'
     # option = sys.argv[1], 'first argument'
@@ -166,7 +171,6 @@ def main():
 
     # In the following, triple quotes ''' are used for multi-line strings
     # ==> we can include line breaks in the strings without using escape characters '\n'
-
 
     # Basic sanity checks on minimum arguments
     # We need at least 2 arguments, that means
@@ -213,8 +217,6 @@ def main():
     if not os.path.isfile(file_path):
         print(f'''Error: The file {file_path} does not exist or is not readable.''')
         sys.exit(1)
-
-
 
     # Load the data from the file
     data = read_file(file_path)
