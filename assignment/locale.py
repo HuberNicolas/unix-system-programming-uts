@@ -5,6 +5,12 @@ import os
 # locale.py is already a standard python library.
 
 '''
+    Author: Nicolas Hube
+    Github: https://github.com/NicolasHuber
+    Date: 15.04.2024
+'''
+
+'''
 Requirements for the locale.py program:
 
 1. Program Name:
@@ -152,16 +158,26 @@ def version_info():
 
 # Main function to process command-line arguments
 def main():
+
+    # python locale.py option argument_file
+    # name of the python script that is executed: sys.argv[0], '0th argument'
+    # option = sys.argv[1], 'first argument'
+    # argument file = sys.argv[2], 'second argument'
+
     # In the following, triple quotes ''' are used for multi-line strings
     # ==> we can include line breaks in the strings without using escape characters '\n'
 
 
     # Basic sanity checks on minimum arguments
+    # We need at least 2 arguments, that means
     if len(sys.argv) < 3:
         print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
         sys.exit(1)
 
+    # Extract option from CLI
     option = sys.argv[1]
+
+    # Futher checks based on option
 
     # Handle the -v option first since its a common case and simple to check
     if option == '-v':
@@ -177,13 +193,17 @@ def main():
         return
 
     # Handle -l for language-specific information with a requireent for 4 arguments
+
+    # Distinguish 2 cases
     elif option == '-l':
+        # Case1: specific language <language> is given
         if len(sys.argv) != 4:
-            print(f'''Incorrect usage for language info. Correct usage: {sys.argv[0]} -l <language> argument_file''')
+            print(f"""Incorrect usage for language info. Correct usage: {sys.argv[0]} -l <language> argument_file""")
             sys.exit(1)
         language = sys.argv[2]
         file_path = sys.argv[3]
     else:
+        # Case1: specific language <language> is not given
         if len(sys.argv) != 3:
             print(f'''Incorrect usage. Correct usage: {sys.argv[0]} -option argument_file''')
             sys.exit(1)
@@ -193,6 +213,8 @@ def main():
     if not os.path.isfile(file_path):
         print(f'''Error: The file {file_path} does not exist or is not readable.''')
         sys.exit(1)
+
+
 
     # Load the data from the file
     data = read_file(file_path)
