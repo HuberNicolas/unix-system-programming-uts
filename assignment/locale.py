@@ -1,7 +1,6 @@
 # IMPORTS
 import sys
 import os
-import typing
 
 # Disclaimer: During development, the name of the script was changed to my_locale.py
 # locale.py is already a standard python library.
@@ -51,27 +50,14 @@ Requirements for the locale.py program:
 
 '''
 
-
-class Locale:
-    pass
-
-
-class Charmap:
-    pass
-
-class File:
-    def __init__(self, path, content="", ):
-        self.path = path
-        self.content = content
-
-
 # CONSTANTS
 CHARMAP_STR = 'charmap'
 LOCALE_STR = 'locale'
 
 
+
 # Function to read the file and parse its contents
-def read_file(file_path) -> list[list[str]] | None:
+def read_file(file_path):
     #   Exists
     #   is a file
     #   is readable
@@ -104,7 +90,7 @@ def read_file(file_path) -> list[list[str]] | None:
 
 
 # Function to list available locales
-def list_locales(data) -> list[list[str]] | None:
+def list_locales(data):
     # Initialize an empty list to store locale filenames
     locales = []
 
@@ -123,7 +109,7 @@ def list_locales(data) -> list[list[str]] | None:
 
 
 # Function to list available charmaps
-def list_charmaps(data) -> list[list[str]] | None:
+def list_charmaps(data):
     # Initialize an empty list to store charmap filenames
     charmaps = []
     # Iterate through each row in the data
@@ -141,7 +127,7 @@ def list_charmaps(data) -> list[list[str]] | None:
 
 
 # Function to list information about a specific language
-def language_info(data, language) -> list[str] | None:
+def language_info(data, language):
     # Initialize empty lists to store locale and charmap entries
     locales = []
     charmaps = []
@@ -168,7 +154,7 @@ def language_info(data, language) -> list[str] | None:
 
 
 # Function to print version information: author, studid and submission date
-def version_info() -> list[str]:
+def version_info():
     return [
         'Nicolas Huber',
         25061944,
@@ -177,9 +163,7 @@ def version_info() -> list[str]:
 
 
 # Main function to process command-line arguments
-def main() -> None:
-    global language
-
+def main():
     # python locale.py option argument_file
     # name of the python script that is executed: sys.argv[0], '0th argument'
     # option = sys.argv[1], 'first argument'
@@ -190,7 +174,6 @@ def main() -> None:
 
     # Basic sanity checks on minimum arguments
     # We need at least 2 arguments, that means
-
     if len(sys.argv) < 3:
         print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
         sys.exit(1)
