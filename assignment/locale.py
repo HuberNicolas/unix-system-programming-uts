@@ -1,17 +1,16 @@
-# IMPORTS
-import sys
-import os
-
 # Disclaimer: During development, the name of the script was changed to my_locale.py
 # locale.py is already a standard python library.
 
-'''
-    Author: Nicolas Hube
-    Github: https://github.com/NicolasHuber
+"""
+    Author: Nicolas Huber
+    GitHub: https://github.com/NicolasHuber
     Date: 15.04.2024
-'''
+"""
 
 '''
+Fundamental note: your program is not expected to verify that file argument_file complies with the above specifications.
+It will only be tested with _compliant_ files. 
+
 Requirements for the locale.py program:
 
 1. Program Name:
@@ -47,17 +46,31 @@ Requirements for the locale.py program:
 
 9. Error Handling:
    - Specific messages for incorrect syntax or command usage. Examples include missing file arguments or incorrect options.
-
 '''
 
+# IMPORTS
+import sys
+import os
+
+
+class File:
+    def __init__(self, path: str, content: list[list[str]]):
+        self.path = path
+        self.content = content
+
 # CONSTANTS
+# TODO: Create Const class
 CHARMAP_STR = 'charmap'
 LOCALE_STR = 'locale'
 
+NO_CHARMAP_STR = 'No charmaps available'
+NO_LOCALE_STR = 'No locales available'
+
+NO_CHARMAP_AND_NO_LOCALE_STR = 'No locales or charmaps in this language'
 
 
 # Function to read the file and parse its contents
-def read_file(file_path):
+def read_file(file_path: str) -> File | None:
     #   Exists
     #   is a file
     #   is readable
@@ -82,59 +95,24 @@ def read_file(file_path):
                 if clean_line:
                     # Split the line by commas and add to the list of parsed data
                     parsed_data.append(clean_line.split(','))
-            return parsed_data
+            return File(file_path, parsed_data)
     except IOError:
         # Handle the error if the file cannot be read
         print(f'Error: The file "{file_path}" cannot be read.')
         return None
 
 
-# Function to list available locales
-def list_locales(data):
-    # Initialize an empty list to store locale filenames
-    locales = []
-
-    # Iterate through each row in the data
-    for row in data:
-        # Check if the row type is 'locale'
-        if row[0] == LOCALE_STR:
-            # Add the filename part of the row to the locales list
-            locales.append(row[2])
-
-    # Check if there are charmaps
-    if locales:
-        return locales
-    else:
-        return ['No locales available']
-
-
-# Function to list available charmaps
-def list_charmaps(data):
-    # Initialize an empty list to store charmap filenames
-    charmaps = []
-    # Iterate through each row in the data
-    for row in data:
-        # Check if the row type is 'charmap'
-        if row[0] == CHARMAP_STR:
-            # Add the filename part of the row to the charmaps list
-            charmaps.append(row[2])
-
-    # Check if there are charmaps
-    if charmaps:
-        return charmaps
-    else:
-        return ['No charmaps available']
-
-
 # Function to list information about a specific language
-def language_info(data, language):
+def language_info(file: File, language: str) -> list[str] | None:
+    # Seems a bit overkill to add another class for language, already
+    # a bit overengineered
     # Initialize empty lists to store locale and charmap entries
     locales = []
     charmaps = []
 
     # Iterate through each row in the data
-    for row in data:
-        # Check if the row is a locale and matches the specified language
+    for row in file.content:
+        # Check if the row is a locale and matches the specifieid language
         if row[0] == LOCALE_STR and row[1] == language:
             locales.append(row)  # Add the entire row to the locales list
 
@@ -154,7 +132,7 @@ def language_info(data, language):
 
 
 # Function to print version information: author, studid and submission date
-def version_info():
+def version_info() -> list[str]:
     return [
         'Nicolas Huber',
         25061944,
@@ -163,17 +141,20 @@ def version_info():
 
 
 # Main function to process command-line arguments
-def main():
+def main() -> None:
+    global language
+
     # python locale.py option argument_file
     # name of the python script that is executed: sys.argv[0], '0th argument'
     # option = sys.argv[1], 'first argument'
-    # argument file = sys.argv[2], 'second argument'
+    # argument file = sys.argv[2], 'secon argument'
 
     # In the following, triple quotes ''' are used for multi-line strings
     # ==> we can include line breaks in the strings without using escape characters '\n'
 
     # Basic sanity checks on minimum arguments
     # We need at least 2 arguments, that means
+
     if len(sys.argv) < 3:
         print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
         sys.exit(1)
@@ -183,7 +164,7 @@ def main():
 
     # Futher checks based on option
 
-    # Handle the -v option first since its a common case and simple to check
+    # Handle the -v option first since its a common case and simpel to check
     if option == '-v':
         if len(sys.argv) != 3:
             print(f'''Incorrect usage for version info. Correct usage: {sys.argv[0]} -v argument_file''')
@@ -219,18 +200,55 @@ def main():
         sys.exit(1)
 
     # Load the data from the file
-    data = read_file(file_path)
+    file = read_file(file_path)
 
     # Execute the appropriate option
     if option == '-a':
-        for locale in list_locales(data):
-            print(locale)
+        if file.content == '':
+            print(NO_LOCALE_STR)
+        else:
+            at_least_one_locale = False
+            for row in file.content:
+                if row[0] == LOCALE_STR:
+                    at_least_one_locale = True
+                    print(row[2])
+            if not at_least_one_locale:
+                print(NO_LOCALE_STR)
     elif option == '-m':
-        for charmap in list_charmaps(data):
-            print(charmap)
+        if file.content == '':
+            print(NO_CHARMAP_STR)
+        else:
+            at_least_one_charmap = False
+            for row in file.content:
+                if row[0] == CHARMAP_STR:
+                    at_least_one_charmap = True
+                    print(row[2])
+            if not at_least_one_charmap:
+                print(NO_CHARMAP_STR)
+
     elif option == '-l':
-        for line in language_info(data, language):
-            print(line)
+        l_counter = 0
+        c_counter = 0
+        if file.content == '':
+            print('NO_LOCALE_STR')  # TODO: to be defined
+        else:
+
+            for row in file.content:
+                if row[1] == language:
+                    if row[0] == LOCALE_STR:
+                        l_counter += 1
+                    elif row[0] == CHARMAP_STR:
+                        c_counter += 1
+                    else:
+                        pass  # this would be a bug
+
+            if (l_counter == 0) and (c_counter == 0):
+                print(NO_CHARMAP_AND_NO_LOCALE_STR)
+            else:
+                print(f'Language {language}:')
+                print(f'Total number of locales: {l_counter}')
+                print(f'Total number of charmaps: {c_counter}')
+
     else:
         print(f'''Error: Invalid option {option}''')
         sys.exit(1)
