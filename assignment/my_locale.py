@@ -3,7 +3,7 @@
 
 """
     Author: Nicolas Huber
-    Github: https://github.com/NicolasHuber
+    GitHub: https://github.com/NicolasHuber
     Date: 15.04.2024
 """
 
@@ -58,57 +58,15 @@ class File:
         self.path = path
         self.content = content
 
-
-class Locale:
-
-    def __init__(self, l: File | list[str] | str = None):
-        if l is None:
-            self.locales = []
-        if isinstance(l, str):
-            self.locales = [l]
-        if isinstance(l, File):
-            for line in l.content:
-                self.locales.append(line[2])
-        else:
-            self.locales = l
-
-    def add_locale(self, locale):
-        self.locales.append(locale)
-
-    def print_locale(self):
-        if not self.locales:
-            print("No locales available")
-        else:
-            for locale in self.locales:
-                print(locale)
-
-
-class Charmap:
-    def __init__(self, c: File | list[str] | str = None):
-        if c is None:
-            self.charmaps = []
-        elif isinstance(c, str):
-            self.charmaps = [c]
-        elif isinstance(c, File):
-            self.charmaps = c.content
-        else:
-            self.charmaps = c
-
-    def add_charmap(self, charmap: str):
-        self.charmaps.append(charmap)
-
-    def print_charmap(self):
-        if not self.charmaps:
-            print('No charmaps available')
-        else:
-            for charmap in self.charmaps:
-                print(charmap)
-
-
 # CONSTANTS
 # TODO: Create Const class
 CHARMAP_STR = 'charmap'
 LOCALE_STR = 'locale'
+
+NO_CHARMAP_STR = 'No charmaps available'
+NO_LOCALE_STR = 'No locales available'
+
+NO_CHARMAP_AND_NO_LOCALE_STR = 'No locales or charmaps in this language'
 
 
 # Function to read the file and parse its contents
@@ -154,7 +112,7 @@ def language_info(file: File, language: str) -> list[str] | None:
 
     # Iterate through each row in the data
     for row in file.content:
-        # Check if the row is a locale and matches the specified language
+        # Check if the row is a locale and matches the specifieid language
         if row[0] == LOCALE_STR and row[1] == language:
             locales.append(row)  # Add the entire row to the locales list
 
@@ -246,15 +204,51 @@ def main() -> None:
 
     # Execute the appropriate option
     if option == '-a':
-        print(file.content)
-        locales = Locale(file)
-        locales.print_locale()
+        if file.content == '':
+            print(NO_LOCALE_STR)
+        else:
+            at_least_one_locale = False
+            for row in file.content:
+                if row[0] == LOCALE_STR:
+                    at_least_one_locale = True
+                    print(row[2])
+            if not at_least_one_locale:
+                print(NO_LOCALE_STR)
     elif option == '-m':
-        charmaps = Charmap(file)
-        charmaps.print_charmap()
+        if file.content == '':
+            print(NO_CHARMAP_STR)
+        else:
+            at_least_one_charmap = False
+            for row in file.content:
+                if row[0] == CHARMAP_STR:
+                    at_least_one_charmap = True
+                    print(row[2])
+            if not at_least_one_charmap:
+                print(NO_CHARMAP_STR)
+
     elif option == '-l':
-        for line in language_info(file, language):
-            print(line)
+        l_counter = 0
+        c_counter = 0
+        if file.content == '':
+            print('NO_LOCALE_STR')  # TODO: to be defined
+        else:
+
+            for row in file.content:
+                if row[1] == language:
+                    if row[0] == LOCALE_STR:
+                        l_counter += 1
+                    elif row[0] == CHARMAP_STR:
+                        c_counter += 1
+                    else:
+                        pass  # this would be a bug
+
+            if (l_counter == 0) and (c_counter == 0):
+                print(NO_CHARMAP_AND_NO_LOCALE_STR)
+            else:
+                print(f'Language {language}:')
+                print(f'Total number of locales: {l_counter}')
+                print(f'Total number of charmaps: {c_counter}')
+
     else:
         print(f'''Error: Invalid option {option}''')
         sys.exit(1)
