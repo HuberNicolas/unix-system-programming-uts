@@ -1,11 +1,11 @@
 # Disclaimer: During development, the name of the script was changed to my_locale.py
 # locale.py is already a standard python library.
 
-'''
+"""
     Author: Nicolas Huber
     Github: https://github.com/NicolasHuber
     Date: 15.04.2024
-'''
+"""
 
 '''
 Fundamental note: your program is not expected to verify that file argument_file complies with the above specifications.
@@ -46,7 +46,6 @@ Requirements for the locale.py program:
 
 9. Error Handling:
    - Specific messages for incorrect syntax or command usage. Examples include missing file arguments or incorrect options.
-
 '''
 
 # IMPORTS
@@ -61,15 +60,17 @@ class File:
 
 
 class Locale:
-    def __init__(self, locales: File | list[str] | str = None):
-        if locales is None:
+
+    def __init__(self, l: File | list[str] | str = None):
+        if l is None:
             self.locales = []
-        if isinstance(locales, str):
-            self.locales = [locales]
-        if isinstance(locales, File):
-            self.locales = locales.content
+        if isinstance(l, str):
+            self.locales = [l]
+        if isinstance(l, File):
+            for line in l.content:
+                self.locales.append(line[2])
         else:
-            self.locales = locales
+            self.locales = l
 
     def add_locale(self, locale):
         self.locales.append(locale)
@@ -83,15 +84,15 @@ class Locale:
 
 
 class Charmap:
-    def __init__(self, charmaps=None):
-        if charmaps is None:
+    def __init__(self, c: File | list[str] | str = None):
+        if c is None:
             self.charmaps = []
-        elif isinstance(charmaps, str):
-            self.charmaps = [charmaps]
-        elif isinstance(charmaps, File):
-            self.charmaps = charmaps.content
+        elif isinstance(c, str):
+            self.charmaps = [c]
+        elif isinstance(c, File):
+            self.charmaps = c.content
         else:
-            self.charmaps = charmaps
+            self.charmaps = c
 
     def add_charmap(self, charmap: str):
         self.charmaps.append(charmap)
@@ -245,6 +246,7 @@ def main() -> None:
 
     # Execute the appropriate option
     if option == '-a':
+        print(file.content)
         locales = Locale(file)
         locales.print_locale()
     elif option == '-m':
