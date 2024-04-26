@@ -2,12 +2,15 @@
 # locale.py is already a standard python library.
 
 '''
-    Author: Nicolas Hube
+    Author: Nicolas Huber
     Github: https://github.com/NicolasHuber
     Date: 15.04.2024
 '''
 
 '''
+Fundamental note: your program is not expected to verify that file argument_file complies with the above specifications.
+It will only be tested with _compliant_ files. 
+
 Requirements for the locale.py program:
 
 1. Program Name:
@@ -49,7 +52,6 @@ Requirements for the locale.py program:
 # IMPORTS
 import sys
 import os
-import typing
 
 
 class File:
