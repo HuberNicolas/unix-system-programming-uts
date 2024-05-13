@@ -58,6 +58,7 @@ class File:
         self.path = path
         self.content = content
 
+
 # CONSTANTS
 # TODO: Create Const class
 CHARMAP_STR = 'charmap'
@@ -210,6 +211,8 @@ def main() -> None:
             at_least_one_locale = False
             for row in file.content:
                 if row[0] == LOCALE_STR:
+                    if not at_least_one_locale:
+                        print('Available locales:')
                     at_least_one_locale = True
                     print(row[2])
             if not at_least_one_locale:
@@ -221,6 +224,8 @@ def main() -> None:
             at_least_one_charmap = False
             for row in file.content:
                 if row[0] == CHARMAP_STR:
+                    if not at_least_one_charmap:
+                        print('Available charmaps:')
                     at_least_one_charmap = True
                     print(row[2])
             if not at_least_one_charmap:
