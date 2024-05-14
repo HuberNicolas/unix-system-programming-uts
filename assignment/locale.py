@@ -68,8 +68,8 @@ NO_LOCALE_STR = 'No locales available'
 
 NO_CHARMAP_AND_NO_LOCALE_STR = 'No locales or charmaps in this language'
 
-SUCCESSFUL_EXIT_CODE = 0
-UNSUCCESSFUL_EXIT_CODE = 1
+SUCCESS_EXIT_CODE = 0
+ERROR_EXIT_CODE = 1
 
 
 # Function to read the file and parse its contents
@@ -81,19 +81,19 @@ def read_file(file_path: str) -> File | None:
     # Check if the file exists
     if not os.path.exists(file_path):
         print(f'Error: The file "{file_path}" does not exist.')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
     # Check if the file_path is indeed a file
     if not os.path.isfile(file_path):
         print(f'Error: "{file_path}" is not a file.')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
     # Check if file in file_path is readable
     # https://docs.python.org/3/library/os.html
     # https://docs.python.org/3/library/os.html#os.R_OK
     if not os.access(file_path, os.R_OK):
         print(f'Error: "{file_path}" is not readable.')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
 
     # Open the file and read its contents
@@ -111,7 +111,7 @@ def read_file(file_path: str) -> File | None:
     except IOError:
         # Handle the error if the file cannot be read
         print(f'Error: The file "{file_path}" cannot be read.')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
 
 # Function to print version information: author, studid and submission date
@@ -141,10 +141,15 @@ def main() -> None:
 
     if len(sys.argv) < 3:
         print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
     # Extract option from CLI
     option = sys.argv[1]
+
+    # Prevent mixed up entry of arguments
+    if option not in ['-v', '-m', '-l', '-a']:
+        print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option [language] argument_file''')
+        sys.exit(ERROR_EXIT_CODE)
 
     # Further checks based on option
 
@@ -152,7 +157,7 @@ def main() -> None:
     if option == '-v':
         if len(sys.argv) != 3:
             print(f'''Incorrect usage for version info.\nCorrect usage: {sys.argv[0]} -v argument_file''')
-            sys.exit(UNSUCCESSFUL_EXIT_CODE)
+            sys.exit(ERROR_EXIT_CODE)
         file_path = sys.argv[2]
         # Load the data from the file
         read_file(file_path)
@@ -167,14 +172,14 @@ def main() -> None:
         # Case1: specific language <language> is given
         if len(sys.argv) != 4:
             print(f'''Incorrect usage for language info.\nCorrect usage: {sys.argv[0]} -l <language> argument_file''')
-            sys.exit(UNSUCCESSFUL_EXIT_CODE)
+            sys.exit(ERROR_EXIT_CODE)
         language = sys.argv[2]
         file_path = sys.argv[3]
     else:
         # Case1: specific language <language> is not given
         if len(sys.argv) != 3:
             print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option argument_file''')
-            sys.exit(UNSUCCESSFUL_EXIT_CODE)
+            sys.exit(ERROR_EXIT_CODE)
         file_path = sys.argv[2]
 
     # Load the data from the file
@@ -186,7 +191,7 @@ def main() -> None:
         locales = []
         if not file.content:
             print(NO_LOCALE_STR)
-            sys.exit(SUCCESSFUL_EXIT_CODE)
+            sys.exit(SUCCESS_EXIT_CODE)
         else:
             for row in file.content:
                 if row[0] == LOCALE_STR:
@@ -197,16 +202,16 @@ def main() -> None:
                 print('Available locales:')
                 # Join all locales with newline and print once
                 print('\n'.join(locales))
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
             else:
                 print(NO_LOCALE_STR)
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
     elif option == '-m':
         # Init Output
         charmaps = []
         if file.content == '':
             print(NO_CHARMAP_STR)
-            sys.exit(SUCCESSFUL_EXIT_CODE)
+            sys.exit(SUCCESS_EXIT_CODE)
         else:
             for row in file.content:
                 if row[0] == CHARMAP_STR:
@@ -217,10 +222,10 @@ def main() -> None:
                 print('Available charmaps:')
                 # Join all charmaps with newline and print once
                 print('\n'.join(charmaps))
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
             else:
                 print(NO_CHARMAP_STR)
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
 
     elif option == '-l':
         # Init Output
@@ -228,7 +233,7 @@ def main() -> None:
         c_counter = 0
         if file.content == '':
             print('NO_LOCALE_STR')
-            sys.exit(SUCCESSFUL_EXIT_CODE)
+            sys.exit(SUCCESS_EXIT_CODE)
         else:
 
             for row in file.content:
@@ -242,16 +247,16 @@ def main() -> None:
 
             if (l_counter == 0) and (c_counter == 0):
                 print(NO_CHARMAP_AND_NO_LOCALE_STR)
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
             else:
                 print(f'Language {language}:')
                 print(f'Total number of locales: {l_counter}')
                 print(f'Total number of charmaps: {c_counter}')
-                sys.exit(SUCCESSFUL_EXIT_CODE)
+                sys.exit(SUCCESS_EXIT_CODE)
 
     else:
         print(f'''Error: Invalid option {option}''')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
+        sys.exit(ERROR_EXIT_CODE)
 
 
 if __name__ == '__main__':
