@@ -3,7 +3,7 @@
 
 """
     Author: Nicolas Huber
-    GitHub: https://github.com/NicolasHuber
+    GitHub: https://github.com/HuberNicolas
     Date: 15.04.2024
 """
 
