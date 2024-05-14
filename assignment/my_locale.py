@@ -7,7 +7,7 @@
     Date: 15.04.2024
 """
 
-'''
+"""
 Fundamental note: your program is not expected to verify that file argument_file complies with the above specifications.
 It will only be tested with _compliant_ files. 
 
@@ -46,7 +46,7 @@ Requirements for the locale.py program:
 
 9. Error Handling:
    - Specific messages for incorrect syntax or command usage. Examples include missing file arguments or incorrect options.
-'''
+"""
 
 # IMPORTS
 import sys
@@ -93,6 +93,7 @@ def read_file(file_path: str) -> File | None:
             for line in file:
                 # Strip whitespace from the ends and check if the line is not empty
                 clean_line = line.strip()
+                # Very important: Remove empty lines from content
                 if clean_line:
                     # Split the line by commas and add to the list of parsed data
                     parsed_data.append(clean_line.split(','))
@@ -105,8 +106,8 @@ def read_file(file_path: str) -> File | None:
 
 # Function to list information about a specific language
 def language_info(file: File, language: str) -> list[str] | None:
-    # Seems a bit overkill to add another class for language, already
-    # a bit overengineered
+    # Seems a bit overkill to add another class for language,
+    # already a bit overengineered
     # Initialize empty lists to store locale and charmap entries
     locales = []
     charmaps = []
@@ -148,7 +149,7 @@ def main() -> None:
     # python locale.py option argument_file
     # name of the python script that is executed: sys.argv[0], '0th argument'
     # option = sys.argv[1], 'first argument'
-    # argument file = sys.argv[2], 'secon argument'
+    # argument file = sys.argv[2], 'second argument'
 
     # In the following, triple quotes ''' are used for multi-line strings
     # ==> we can include line breaks in the strings without using escape characters '\n'
@@ -165,7 +166,7 @@ def main() -> None:
 
     # Futher checks based on option
 
-    # Handle the -v option first since its a common case and simpel to check
+    # Handle the -v option first since it's a common case and simpel to check
     if option == '-v':
         if len(sys.argv) != 3:
             print(f'''Incorrect usage for version info. Correct usage: {sys.argv[0]} -v argument_file''')
@@ -178,7 +179,7 @@ def main() -> None:
             print(line)
         return
 
-    # Handle -l for language-specific information with a requireent for 4 arguments
+    # Handle -l for language-specific information with a requirement for 4 arguments
 
     # Distinguish 2 cases
     elif option == '-l':
@@ -205,33 +206,42 @@ def main() -> None:
 
     # Execute the appropriate option
     if option == '-a':
-        if file.content == '':
+        # Init Output
+        locales = []
+        if not file.content:
             print(NO_LOCALE_STR)
         else:
-            at_least_one_locale = False
             for row in file.content:
                 if row[0] == LOCALE_STR:
-                    if not at_least_one_locale:
-                        print('Available locales:')
-                    at_least_one_locale = True
-                    print(row[2])
-            if not at_least_one_locale:
+                    # Store locale names in the list
+                    locales.append(row[2])
+
+            if locales:
+                print('Available locales:')
+                # Join all locales with newline and print once
+                print('\n'.join(locales))
+            else:
                 print(NO_LOCALE_STR)
     elif option == '-m':
+        # Init Output
+        charmaps = []
         if file.content == '':
             print(NO_CHARMAP_STR)
         else:
-            at_least_one_charmap = False
             for row in file.content:
                 if row[0] == CHARMAP_STR:
-                    if not at_least_one_charmap:
-                        print('Available charmaps:')
-                    at_least_one_charmap = True
-                    print(row[2])
-            if not at_least_one_charmap:
+                    # Store charmap names in the list
+                    charmaps.append(row[2])
+            if charmaps:
+                # Print header
+                print('Available charmaps:')
+                # Join all charmaps with newline and print once
+                print('\n'.join(charmaps))
+            else:
                 print(NO_CHARMAP_STR)
 
     elif option == '-l':
+        # Init Output
         l_counter = 0
         c_counter = 0
         if file.content == '':
