@@ -117,9 +117,10 @@ def read_file(file_path: str) -> File | None:
 # Function to print version information: author, studid and submission date
 def version_info() -> list[str]:
     return [
-        'Nicolas Huber',
-        25061944,
-        'Friday 17 May 2024'
+        'Name: Huber',
+        'Surname: Nicolas',
+        'Student ID: 25061944',
+        'Date of Completion: Friday 17 May 2024'
     ]
 
 
@@ -175,11 +176,6 @@ def main() -> None:
             print(f'''Incorrect usage.\nCorrect usage: {sys.argv[0]} -option argument_file''')
             sys.exit(UNSUCCESSFUL_EXIT_CODE)
         file_path = sys.argv[2]
-
-    # Check if the file exists and is readable
-    if not os.path.isfile(file_path):
-        print(f'''Error: The file {file_path} does not exist or is not readable.''')
-        sys.exit(UNSUCCESSFUL_EXIT_CODE)
 
     # Load the data from the file
     file = read_file(file_path)
