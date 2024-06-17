@@ -1,0 +1,12 @@
+python numbers.py 
+python readin.py 
+python readin.py 
+python readin.py 
+python re
+python regex.py 
+python regex.py 
+python regex.py 
+python regex.py 
+python regex.py 
+python regex.py 
+python regex.py 
