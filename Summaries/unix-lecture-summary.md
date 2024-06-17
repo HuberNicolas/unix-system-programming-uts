@@ -20,14 +20,12 @@ ls / (/ is ARGUMENT)
 
 `man mv`
 
-
 ## Navigation
 
 `pwd` or `cd`
 
-  
-
 ## Removing files
+
 - when you use command rm, YOU CAN'T UNDO
 
 - you can use **recursive**(-r) and **force**(-f) modes to remove non-empty directories and sub-directories
@@ -43,7 +41,6 @@ rm -rf Junk 
 
 rm -rfi Junk
 ```
-
 
 ## File permissions
 
@@ -84,7 +81,6 @@ To show how all of this fits together we give some examples. In each case chmod 
 7. chmod a+rxw filename   adds read, write and execute permission for all users of the file.
 8. chmod a+w filename   adds write permission for all users of the file.
 
-
 The file permissions can be represented and manipulated numerically as a three digit octal number. The first digit (the left most one) provides the permissions for the owner of the file. The second digit, the permissions for the members of the owners group and the last digit provides the permissions for all other users. The permissions have the following values:
 
 1. read permission has value 4
@@ -113,10 +109,8 @@ To change the file permissions numerically use the chmod command, for example:
 1. chmod 640 f1 changers the permissions of the file "f1".
 2. chmod 640 f* changes the permissions for all files in a directory starting with "f".
 
-
 ## More commands
 
-  
 ```
 cp (to copy)
 
@@ -133,7 +127,6 @@ gzip (to compress)
 command line filters: tail, head, sort…
 ```
 
-
 # Run a shell script
 
 ```
@@ -149,11 +142,7 @@ echo "Hello, World!"
 
 `./HelloWorld.sh`
 
-
-
 ---
-
-
 
 ## Basic Commands
 
@@ -174,8 +163,6 @@ echo // outputs its arguments as a line of text
 
 read // read one line form the standard input
 ```
-
-
 
 ```
 read NAME;
@@ -213,11 +200,9 @@ echo $PATH
 PATH=$PATH:. // adding current folder to path
 ```
 
-
-## Shell  scripting:
+## Shell  scripting
 
 `#!/usr/bin/env bash` is more portable than `#!/bin/bash`
-
 
 ## Loops and Conditional
 
@@ -230,11 +215,11 @@ echo $LIST
 echo
 for FILENAME in $LIST;
 do
-	echo $FILENAME
-	if test $FILENAME == "food2.txt"; # or if [ ... ]
-	then
-		echo "Food list found!";
-	fi
+ echo $FILENAME
+ if test $FILENAME == "food2.txt"; # or if [ ... ]
+ then
+  echo "Food list found!";
+ fi
 done
 ```
 
@@ -289,27 +274,26 @@ fi
 
 You can also use double brackets ie \[\[ some_expression \]\]. This suppresses file path name expansions. Or as noted in the lectures you can use the **test** command.
 
-
 ``` bash
 if [ "$a" = "$b" ]; then
   echo "Strings are equal."
 fi
 
 if [ "$x" -gt "$y" ]; then
-	echo "X is greater than Y."
+ echo "X is greater than Y."
 fi
 
 if [ -n "$var" ]; then
-	echo "Var is not empty."
+ echo "Var is not empty."
 fi
 
 if [ -e "$file" ]; then
-	echo "File exists."
+ echo "File exists."
 fi
 
 
 if [ "$x" -gt 10 ] && [ "$y" -lt 20 ]; then
-	echo "X is greater than 10 AND Y is less than 20."
+ echo "X is greater than 10 AND Y is less than 20."
 fi
 
 if [ "$x" -gt 20 ] || [ "$y" -lt 5 ]; then
@@ -318,16 +302,14 @@ fi
 
 
 if [[ "$filename" == *.txt ]]; then
-	echo "Filename ends with '.txt'."
+ echo "Filename ends with '.txt'."
 fi
 
 ```
 
-
 - `test` is a command that evaluates a conditional expression. Use `test` when you want a clear syntax that is strictly POSIX compliant, ensuring compatibility across various Unix-like systems.
 - `[` is a synonym for `test` with a requirement that it must be followed by a closing `]`. It's more commonly used than `test` for conditions because it visually separates the condition from the rest of the code. It's suitable for most conditional checks where advanced features like regex matching or pattern matching are not needed.
 - `[[` is a Bash keyword that offers more advanced features than `[` or `test`, including pattern matching, regular expression matching, and it does not word-split variables, so it's safer to use with variables that may contain spaces or special characters. It's not POSIX compliant, so its use is preferred when you are sure your script will run in a Bash environment.
-
 
 ```bash
 # TEST
@@ -341,7 +323,6 @@ if test ! -e "$filename"; then
   echo "$filename does not exist."
 fi
 ```
-
 
 ``` bash
 # []
@@ -385,22 +366,20 @@ fi
 
 Pipe is used to pass output to another **program or utility**.
 
-
 - **Standard input**(or STDIN, file descriptor: 0) from the keyboard
 
 - **Standard output**(or STDOUT, file descriptor: 1) to the screen
 
 - **Standard error**(or STDERR , file descriptor: 2), also to the screen, but with a special meaning: it conveys error messages
 
-
 _Piping_ is the process of redirecting the standard output of one command to the standard input of another one
 
 ``` bash
 ls -l | wc -l
 ```
+
 Tells you how many files and directories are in the current directory (NB: plus one, since ls –l produces an extra line)
 
-  
 ## Redirection
 
 Redirect is used to pass output to either a **file or stream**.
@@ -417,7 +396,6 @@ cat <l.txt // redirects the input of cat to come from file l.txt
 ls –l >>l.txt // appends the file listing in long format to existing file l.txt; if file doesn’t exist, creates it
 ```
 
-
 ```
 ls –l 1> l.txt // std ouput to text
 
@@ -428,13 +406,11 @@ ls non_existing.txt 2> l.txt // A way to redirect the standard error
 cat l.txt non_existing.txt > l.txt 2>&1 // A way to redirect the standard output and error, & is needed before 1, otherwise bash thinks it is a filename
 ```
 
-
 ## Commands and STDIN
 
 ```
 sort // then ENTER, then enter a list, then CTRL+D (^D)
 ```
-
 
 ```
 wc –w food2.txt // food2.txt passed as argument
@@ -446,12 +422,12 @@ ls -l food2.txt massimo > l.txt // if standard error is not redirected, l.txt is
 > l.txt // creates an empty file (!)
 ```
 
-
 ## Globbing
 
-* \* any string, including null
-* ? any single char
-* \[...\] any one of the enclosed characters
+- \* any string, including null
+- ? any single char
+- \[...\] any one of the enclosed characters
+
 ```
 ls *.txt
 cat *
@@ -459,10 +435,9 @@ ls *.??
 ls food[1-3].txt
 ```
 
-
 ## Special parameters
 
- - \* expands to the positional parameters with which the script (or a new shell) are called (i.e. the script’s arguments) as a single string. The separator (default: a space) can be chosen
+- \* expands to the positional parameters with which the script (or a new shell) are called (i.e. the script’s arguments) as a single string. The separator (default: a space) can be chosen
 
 - 1 - 9 each expands to one positional parameter (more than nine is possible)
 
@@ -470,7 +445,7 @@ ls food[1-3].txt
 
 - \# expands to the number of positional parameters
 
-- ? expands to the _exit status_ of the most recently executed command 
+- ? expands to the _exit status_ of the most recently executed command
 
 - $ expands to the process ID of the script (or shell)
 
@@ -498,7 +473,6 @@ echo $0 --> ./s.sh
 $? --> 5
 ```
 
-
 ## Arithmetic expansion
 
 `$(( ))`
@@ -508,7 +482,6 @@ $? --> 5
 - \\ escape
 - ' single quotes (strongest) -> cannot be nested
 - " double quotes -> "The value of variable A is $A"
-
 
 ## Commands
 
@@ -525,7 +498,6 @@ split // split large files (logs) into smaller ones, default 1000 lines
 tr // translate, delete and squeez
 ```
 
-
 ```
 sort datei.txt | uniq // sort and delete double lines
 sort datei.txt | uniq -d // only show doubled lines
@@ -538,32 +510,31 @@ cat datei1 datei2 datei3 | sort | uniq > datei.txt
 In summary, `join` is used for combining files based on a matching field (requiring sorted files), while `paste` simply merges lines from files side by side based on their line order, without any requirement for the files to be sorted.
 
 ---
+
 ## GREP
 
 grep –E, where available, should be the same as egrep
 
--c prints the count of the matching lines for each argument file 
+-c prints the count of the matching lines for each argument file
 
 -l prints the name of each argument file containing matching lines
-
 
 ### Repetition
 
 _How many times?_
 
 - `?` The preceding item must be there 0 times or 1 time
-- `*` 0 or more times 
-	→ regex `.*` matches 0 or as many characters 
-- `+` 1 or more times 
-	→ regex `.+` matches 1 or as many characters
+- `*` 0 or more times
+ → regex `.*` matches 0 or as many characters
+- `+` 1 or more times
+ → regex `.+` matches 1 or as many characters
 - `{n}` n times
 - `{n,m}` at least n times, but not more than m times
-
 
 ## Operators
 
 - `()` group a sequence (behave as one)
-- `|` or 
+- `|` or
 
 ## Bracket expressions
 
@@ -638,8 +609,7 @@ xargs is a general-purpose Unix command that converts its standard input into **
 - `/boot` kernel, usually one file
 - `/bin` system commands
 
-
-## Phyiscal strucutre of a partition
+##  Phyiscal strucutre of a partition
 
   1. Boot Blook (used if partition is bootable yes/no)
   2. "Superblock" (information about the layout of the blocks, e.g., how large are the blocks)
@@ -647,5 +617,4 @@ xargs is a general-purpose Unix command that converts its standard input into **
   3. "i-list" (Long array of bits of information; List/Array of the i-nodes; Every file or directory has one inode; inode == pointers)
   4. Storage space (blocks occupied by data + free blocks)
   
-
 - Pointer is an address to a block in the partition

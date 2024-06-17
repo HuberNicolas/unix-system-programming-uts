@@ -346,6 +346,7 @@ done
 ```
 
 `./iterate.sh 5`
+
 ```
 Index: 1
 Index: 2
@@ -370,6 +371,7 @@ done
 ```
 
 `./script.sh one two three`
+
 ```
 Number of arguments passed: 3
 one
@@ -393,11 +395,11 @@ done
 ```
 
 `./script.sh one two three`
+
 ```
 All arguments with $*: one two three
 one two three
 ```
-
 
 ___
 
@@ -415,14 +417,14 @@ done
 ```
 
 `./script.sh "one two" three`
+
 ```
 Iterating arguments with $@
 one two
 three
 ```
 
-
-## IF-ELSE 
+## IF-ELSE
 
 ```bash
 #!/bin/bash
@@ -448,7 +450,6 @@ while [ $count -le 5 ]; do
   ((count++))
 done
 ```
-
 
 ## VARIABLES
 
@@ -481,38 +482,47 @@ Regular expressions (regex) are a sequence of characters that define a search pa
 ### GREP and Pattern Matching Examples
 
 #### Dot (.)
+
 - **Example:** `grep "e.r" file.txt`
 - **Explanation:** Matches any character between "e" and "r". So, it can match "ear", "eer", "e3r", etc.
 
 #### Asterisk (*)
+
 - **Example:** `grep "ea*r" file.txt`
 - **Explanation:** Matches zero or more occurrences of the preceding character. So, it can match "er", "ear", "eaar", "eaaar", etc.
 
 #### Question Mark (?)
+
 - **Example:** `grep "ea?r" file.txt`
 - **Explanation:** Matches zero or one occurrence of the preceding character. So, it can match "er" and "ear" but not "eaar".
 
 #### Parentheses (())
+
 - **Example:** `grep "(ea)r" file.txt`
 - **Explanation:** Groups characters together. This example doesn't effectively demonstrate the utility of parentheses beyond grouping "ea" as a single unit, which is more useful in conjunction with other operators like `|`.
 
 #### Square Brackets ([])
+
 - **Example:** `grep "e[ao]r" file.txt`
 - **Explanation:** Matches any single character contained within the brackets. So, it can match "ear" and "eor".
 
 #### Curly Braces ({})
+
 - **Example:** `grep "ea{2}r" file.txt`
 - **Explanation:** Matches a specified number of occurrences of the preceding character. So, it matches "eaar" but not "ear" or "eaaar".
 
 #### Caret (^)
+
 - **Example:** `grep "^ear" file.txt`
 - **Explanation:** Matches the start of a line. So, it finds lines that start with "ear".
 
 #### Dollar Sign ($)
+
 - **Example:** `grep "ear$" file.txt`
 - **Explanation:** Matches the end of a line. So, it finds lines that end with "ear".
 
 #### Pipe (|)
+
 - **Example:** `grep "cat\|dog" file.txt`
 - **Explanation:** Acts as an OR operator. It finds lines containing either "cat" or "dog".
 
@@ -582,7 +592,7 @@ exitfunc
 echo "We will never see this"
 ```
 
-## General options:
+## General options
 
 - `-a`, `--all`: Show all items, including hidden ones.
 - `-c`: Specify a configuration file or command, or show counts.
